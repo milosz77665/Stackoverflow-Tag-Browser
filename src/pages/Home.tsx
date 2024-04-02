@@ -1,11 +1,18 @@
+import DataTable from "../components/DataTable";
 import { useLoaderData } from "react-router-dom";
+import Tag from "../models/Tag";
 import TagsData from "../models/TagsData";
 
 const Home = () => {
   const tagsData = useLoaderData() as TagsData;
 
-  console.log(tagsData);
-  return <p>Home</p>;
+  return (
+    <DataTable<Tag>
+      data={tagsData ? tagsData.items : []}
+      keyNames={["name", "count"]}
+      columnNames={["Tag name", "Count"]}
+    />
+  );
 };
 
 export default Home;

@@ -4,7 +4,9 @@ import { Outlet } from "react-router-dom";
 const RootLayout = () => {
   return (
     <Box
-      style={{
+      sx={{
+        height: "fit-content",
+        minHeight: "100vh",
         padding: "3rem",
         display: "flex",
         flexDirection: "column",
