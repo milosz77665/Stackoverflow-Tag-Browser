@@ -1,12 +1,17 @@
-import { Typography } from "@mui/material";
-import "./styles/App.css";
+import Home from "./pages/Home";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import RootLayout from "./pages/RootLayout";
 
-function App() {
-  return (
-    <>
-      <Typography>Stackoverflow Tag Browser</Typography>
-    </>
-  );
-}
+const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RootLayout />,
+      children: [{ index: true, element: <Home /> }],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
+};
 
 export default App;
