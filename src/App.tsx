@@ -1,4 +1,4 @@
-import Home from "./pages/Home";
+import Home, { tagsDataLoader } from "./pages/Home";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/RootLayout";
 
@@ -7,7 +7,7 @@ const App = () => {
     {
       path: "/",
       element: <RootLayout />,
-      children: [{ index: true, element: <Home /> }],
+      children: [{ index: true, element: <Home />, loader: tagsDataLoader }],
     },
   ]);
 
