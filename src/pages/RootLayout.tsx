@@ -11,13 +11,12 @@ const RootLayout = () => {
         display: "flex",
         flexDirection: "column",
         gap: "6rem",
-        justifyContent: "space-between",
       }}
     >
       <Typography variant="h3" component="h1">
         Stackoverflow Tag Browser
       </Typography>
-      <Box component={"main"}>
+      <Box sx={{ flexGrow: "1", display: "flex", justifyContent: "center", alignItems: "center" }} component={"main"}>
         <Outlet />
       </Box>
     </Box>
