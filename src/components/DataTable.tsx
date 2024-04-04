@@ -1,15 +1,10 @@
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableSortLabel,
-} from "@mui/material";
+import { Table, TableHead } from "@mui/material";
+import DataTableContainer from "./DataTableContainer";
+import DataTablePaginationRow from "./DataTablePaginationRow";
+import DataTableHeaderRow from "./DataTableHeaderRow";
+import DataTableBody from "./DataTableBody";
 import { ChangeEvent, useMemo, useState } from "react";
+import Order from "../models/Order";
 
 interface DataTableProps<T> {
   data: T[];
@@ -18,7 +13,6 @@ interface DataTableProps<T> {
 }
 
 const DataTable = <T,>({ data, keyNames, columnNames }: DataTableProps<T>) => {
-  type Order = "asc" | "desc";
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof T>(keyNames[0]);
   const [page, setPage] = useState<number>(0);
@@ -67,85 +61,28 @@ const DataTable = <T,>({ data, keyNames, columnNames }: DataTableProps<T>) => {
   }, [order, orderBy, page, rowsPerPage]);
 
   return (
-    <TableContainer
-      sx={{
-        color: "#363434",
-        backgroundColor: "#f2dcc3",
-      }}
-      elevation={1}
-      component={Paper}
-    >
+    <DataTableContainer>
       <Table>
         <TableHead>
-          <TableRow>
-            <TablePagination
-              sx={{
-                color: "#363434",
-                backgroundColor: "#f2dcc3",
-                borderBottomColor: "transparent",
-                fontSize: "0.95rem",
-                "& .MuiTablePagination-displayedRows": { fontSize: "0.95rem" },
-                "& .MuiTablePagination-selectLabel": { fontSize: "0.95rem" },
-              }}
-              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-              colSpan={3}
-              count={data.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-            />
-          </TableRow>
-          <TableRow sx={{ borderColor: "white" }}>
-            {columnNames.map((columnName, index) => (
-              <TableCell
-                sx={{
-                  color: "#fffbf6",
-                  fontWeight: "600",
-                  fontSize: "1.1rem",
-                  backgroundColor: "#d9954a",
-                  borderBottomColor: "transparent",
-                }}
-                key={columnName}
-                sortDirection={order}
-              >
-                <TableSortLabel
-                  sx={{
-                    "&.Mui-active .MuiTableSortLabel-icon": {
-                      color: "#fffbf6",
-                      width: "18px",
-                      height: "18px",
-                    },
-                    "&.MuiTableSortLabel-root": {
-                      color: "#fffbf6",
-                    },
-                  }}
-                  active={orderBy === keyNames[index]}
-                  direction={orderBy === keyNames[index] ? order : "asc"}
-                  onClick={() => {
-                    handleSortClick(keyNames[index]);
-                  }}
-                >
-                  {columnName}
-                </TableSortLabel>
-              </TableCell>
-            ))}
-          </TableRow>
+          <DataTablePaginationRow
+            numberOfRows={data.length}
+            numberOfColumns={columnNames.length}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+          />
+          <DataTableHeaderRow
+            keyNames={keyNames}
+            columnNames={columnNames}
+            order={order}
+            orderBy={orderBy}
+            onSortClick={handleSortClick}
+          />
         </TableHead>
-        <TableBody>
-          {visibleData.map((rowData) => (
-            <TableRow key={`${keyNames.map((keyName) => rowData[keyName]).join()}row`}>
-              {keyNames.map((keyName, index) => (
-                <TableCell
-                  sx={{ color: "#363434", fontSize: "1.1rem", borderBottomColor: "#fffbf6" }}
-                  key={`${index}${keyNames.map((keyName) => rowData[keyName]).join()}cell`}
-                >{`${rowData[keyName]}`}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
+        <DataTableBody visibleData={visibleData} keyNames={keyNames} />
       </Table>
-    </TableContainer>
+    </DataTableContainer>
   );
 };
 
